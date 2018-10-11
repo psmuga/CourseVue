@@ -1,0 +1,28 @@
+.demo{
+    display: inline-block;
+    width: 5em;
+    height: 5em;
+    background-color: #ccc;
+    margin: 1em;
+}
+.red{
+    background-color: red;
+}
+.blue{
+    background-color: blue;
+}
+.green{
+    background-color: green;
+}
+.big{
+    height: 10em !important;
+    width: 10em !important;
+}
+.floatRight{
+    float: right;
+}
+.progressBar{
+    width: auto;
+    height: 20px;
+    border: 1px solid black;
+}

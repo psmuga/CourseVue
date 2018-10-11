@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue First</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div id="app">
+        <h1 v-once>{{title}}</h1>
+        <input type="text" v-on:input="changeTitle" v-bind:value="title" v-on:keyup.enter.space="alertMe">
+        <p>{{ title }} - <a v-bind:href="link">Google</a></p>
+        <hr>
+        <p v-html="finishedLink"></p>
+        <p>{{number * 3}}</p>
+        <p v-once>{{random()}}</p>
+        <hr>
+        <p v-on:mousemove="setCoordinates">
+            Coordinates {{X}},{{Y}}
+            - <span v-on:mousemove.stop="">DEAD SPAN</span>
+        </p>
+        <hr>
+        <input v-on:keydown="title=$event.target.value"></input>
+        <p>{{title}}</p>
+        <hr>
+        <p>Two-way binding</p>
+        <input type="text" v-model="title">
+        <p>{{title}}</p>
+        <hr>
+        <input type="text" v-model="message">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+        <hr>
+        <button @click="number+=1">Add</button>
+        <p>{{result}}</p>
+        <h1>{{number}}</h1>
+        <hr>
+        <div class="demo" @click="attachRed = !attachRed" :class="{red:attachRed}"></div>
+        <div class="demo" :class="divClasses"></div>
+        <div class="demo" :class="color"></div>
+        <input placeholder="type color of last element" type="text" v-model="color">
+        <div class="demo" :style="{'background-color': 'black'}"></div>
+        <div class="demo" :style="myStyle"></div>
+        <div class="demo" :style="[myStyle,{ height: '2em' }]"></div>
+        <div class="demo" v-bind:class="'big'"></div>
+        <hr>
+
+        <input type="text" v-model="userClass">
+        <div class="demo" v-bind:class="[{red:true},userClass]"></div>
+        <hr>
+
+        <h3>Type any color</h3>
+        <input type="text" v-model="myFancyStyle.backgroundColor">
+        <div class="demo" v-bind:style="myFancyStyle"></div>
+        <hr>
+
+        <button @click="startProgress">Start Progress</button>
+        <div :class="['progressBar']" :style="progressBar"></div>
+    </div>
+
+
+
+    <script src="vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                title: 'Hello World!',
+                link: 'http://google.com',
+                finishedLink: '<a href="http://google.com">Google</a>',
+                number: 3,
+                X:0,
+                Y:0,
+                message:'',
+                attachRed: false,
+                color: 'green',
+                userClass:'',
+                myFancyStyle: {
+                    height: '150px',
+                    width: '250px',
+                    backgroundColor: '#ccc'
+                },
+                progressBar:{
+                    width: '0px',
+                    backgroundColor: 'red'
+                }
+            },
+            computed:{
+                reversedMessage: function () {
+                    return this.message.split('').reverse().join('')
+                 },
+                 result: function(){
+                    return this.number==5 ? 'done': 'not done yet';
+                 },
+                 divClasses: function(){
+                     return {
+                         red: !this.attachRed,
+                         blue: this.attachRed
+                     }
+                 },
+                 myStyle: function(){
+                     return {
+                         'background-color': this.color,
+                         width: '2em'
+                     }
+                 },
+                 
+            },
+            watch:{
+               //mozliwe tutaj async
+               result: function(){
+                   var vm = this;
+                   setTimeout(function(){
+                       vm.number= 0;
+                   },5000);
+               }
+            },
+            methods:{
+                changeTitle : function(event){
+                    this.title = "hello";
+                    this.title = event.target.value;
+                },
+                random: function(){
+                    return Math.random();
+                },
+                setCoordinates: function(event){
+                    this.X= event.clientX;
+                    this.Y = event.clientY;
+                },
+                alertMe: function(){
+                    alert("You hanged title!");
+                },
+                startProgress: function(){
+                    var vm = this;
+                    var width = 0;
+                    window.interval = setInterval(function(){
+                        width = width + 10;
+                        vm.progressBar.width = width + 'px';
+                        if(width > document.getElementById('app').clientWidth - 10) 
+                            clearInterval(window.interval);
+                    },50);
+
+                  
+                },
+            }
+        });
+    </script>
+</body>
+</html>
